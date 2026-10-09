@@ -1,0 +1,61 @@
+---
+import { t, localizePath, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+
+const cols = [
+  {
+    heading: locale === 'zh' ? '走一趟' : 'Get on the wall',
+    links: [
+      { label: t(locale, 'nav.tours'), href: localizePath(locale, '/tours') },
+      { label: t(locale, 'nav.blog'), href: localizePath(locale, '/blog') },
+    ],
+  },
+  {
+    heading: locale === 'zh' ? '找到我们' : 'Find us',
+    links: [
+      { label: t(locale, 'nav.about'), href: localizePath(locale, '/about') },
+      { label: t(locale, 'nav.contact'), href: localizePath(locale, '/contact') },
+    ],
+  },
+];
+---
+
+<footer class="mt-24 border-t border-[color:var(--color-line)] bg-[color:var(--color-stone)]">
+  <div class="mx-auto max-w-6xl px-6 py-14">
+    <div class="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
+      <div>
+        <p class="font-display text-2xl text-[color:var(--color-ink)]">
+          {locale === 'zh' ? '逸攀' : 'Yim Rock Tour'}
+          <em class="not-italic text-[color:var(--color-flare)]">.</em>
+        </p>
+        <p class="mt-3 max-w-sm font-mono text-[11px] uppercase tracking-[0.18em] text-[color:var(--color-slate-2)]">
+          {t(locale, 'site.tagline')}
+        </p>
+      </div>
+      {
+        cols.map((col) => (
+          <div>
+            <p class="mono-eyebrow mb-3">{col.heading}</p>
+            <ul class="space-y-2 font-display text-lg">
+              {col.links.map((l) => (
+                <li>
+                  <a class="hover:text-[color:var(--color-flare)] transition-colors" href={l.href}>
+                    {l.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+    <div class="mt-12 flex flex-col gap-2 border-t border-[color:var(--color-line)] pt-6 font-mono text-[11px] uppercase tracking-[0.16em] text-[color:var(--color-slate-2)] md:flex-row md:items-center md:justify-between">
+      <span>© 2026 · {t(locale, 'footer.rights')}</span>
+      <span>{t(locale, 'footer.builtWith')}</span>
+    </div>
+  </div>
+</footer>

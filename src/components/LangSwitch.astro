@@ -1,0 +1,30 @@
+---
+import { LOCALES, switchLocalePath, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+  variant?: 'ink' | 'stone';
+}
+const { locale, variant = 'stone' } = Astro.props;
+
+const other = LOCALES.find((l) => l !== locale)!;
+const href = switchLocalePath(Astro.url.pathname, other);
+const label = other === 'zh' ? 'ZH' : 'EN';
+const currentLabel = locale === 'zh' ? 'ZH' : 'EN';
+---
+
+<a
+  href={href}
+  class:list={[
+    'inline-flex items-center gap-1 font-mono text-[11px] uppercase tracking-[0.2em]',
+    'border px-2 py-1 transition-colors',
+    variant === 'ink'
+      ? 'border-[color:var(--color-line)]/60 text-[color:var(--color-chalk)] hover:bg-[color:var(--color-flare)] hover:text-[color:var(--color-ink)] hover:border-[color:var(--color-flare)]'
+      : 'border-[color:var(--color-ink)] text-[color:var(--color-ink)] hover:bg-[color:var(--color-flare)] hover:text-[color:var(--color-chalk)] hover:border-[color:var(--color-flare)]',
+  ]}
+  aria-label={other === 'zh' ? '切换到中文' : 'Switch to English'}
+>
+  <span class="opacity-50">{currentLabel}</span>
+  <span aria-hidden="true">→</span>
+  <span>{label}</span>
+</a>

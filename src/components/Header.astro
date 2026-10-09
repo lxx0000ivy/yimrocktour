@@ -1,0 +1,129 @@
+---
+import { localizePath, t, type Locale } from '../i18n';
+import LangSwitch from './LangSwitch.astro';
+
+interface Props {
+  locale: Locale;
+  variant?: 'ink' | 'stone';
+}
+const { locale, variant = 'stone' } = Astro.props;
+
+const nav = [
+  { label: t(locale, 'nav.tours'), href: localizePath(locale, '/tours') },
+  { label: t(locale, 'nav.courses'), href: localizePath(locale, '/courses') },
+  { label: t(locale, 'nav.blog'), href: localizePath(locale, '/blog') },
+  { label: t(locale, 'nav.about'), href: localizePath(locale, '/about') },
+  { label: t(locale, 'nav.contact'), href: localizePath(locale, '/contact') },
+];
+
+const homeHref = localizePath(locale, '/');
+const isInk = variant === 'ink';
+---
+
+<header
+  class:list={[
+    'relative z-20 border-b',
+    isInk
+      ? 'border-[color:var(--color-slate-2)] bg-[color:var(--color-ink)] text-[color:var(--color-chalk)]'
+      : 'border-[color:var(--color-line)] bg-[color:var(--color-stone)] text-[color:var(--color-ink)]',
+  ]}
+>
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-4">
+    <a
+      href={homeHref}
+      class="group inline-flex items-center gap-3"
+      aria-label={t(locale, 'site.nameFull')}
+    >
+      <span
+        class:list={[
+          'inline-flex h-9 w-9 items-center justify-center border font-mono text-[11px] tracking-[0.14em]',
+          isInk
+            ? 'border-[color:var(--color-chalk)] text-[color:var(--color-chalk)]'
+            : 'border-[color:var(--color-ink)] text-[color:var(--color-ink)]',
+          'group-hover:bg-[color:var(--color-flare)] group-hover:text-[color:var(--color-ink)] group-hover:border-[color:var(--color-flare)] transition-colors',
+        ]}
+        aria-hidden="true"
+      >YR</span>
+      <span class="flex flex-col leading-none">
+        <span class="font-display text-lg tracking-tight">
+          {locale === 'zh' ? '逸攀' : 'Yim Rock Tour'}
+        </span>
+        <span class:list={[
+          'font-mono text-[10px] uppercase tracking-[0.2em]',
+          isInk ? 'text-[color:var(--color-line)]' : 'text-[color:var(--color-slate-2)]',
+        ]}>
+          {locale === 'zh' ? 'Yim Rock Tour' : '逸攀'}
+        </span>
+      </span>
+    </a>
+
+    <div class="flex items-center gap-3">
+      <details class="header-menu relative">
+        <summary
+          class:list={[
+            'list-none cursor-pointer inline-flex items-center gap-2 border px-2 py-1 font-mono text-[11px] uppercase tracking-[0.2em] transition-colors',
+            isInk
+              ? 'border-[color:var(--color-line)]/60 text-[color:var(--color-chalk)] hover:bg-[color:var(--color-flare)] hover:text-[color:var(--color-ink)] hover:border-[color:var(--color-flare)]'
+              : 'border-[color:var(--color-ink)] text-[color:var(--color-ink)] hover:bg-[color:var(--color-flare)] hover:text-[color:var(--color-chalk)] hover:border-[color:var(--color-flare)]',
+          ]}
+          aria-label="Menu"
+        >
+          <span>Menu</span>
+          <span aria-hidden="true" class="header-menu__chev inline-block transition-transform">↓</span>
+        </summary>
+        <nav
+          aria-label="Primary"
+          class="absolute right-0 top-full z-40 mt-2 w-full border border-[color:var(--color-ink)] bg-[color:var(--color-chalk)] text-[color:var(--color-ink)] shadow-[4px_4px_0_0_var(--color-ink)]"
+        >
+          <ul class="flex flex-col py-1">
+            {
+              nav.map((item) => (
+                <li>
+                  <a
+                    href={item.href}
+                    class:list={[
+                      'block px-2 py-1.5 text-center font-mono text-[11px] uppercase tracking-[0.2em] transition-colors hover:bg-[color:var(--color-flare)] hover:text-[color:var(--color-chalk)]',
+                      Astro.url.pathname === item.href ? 'text-[color:var(--color-flare)]' : '',
+                    ]}
+                    aria-current={Astro.url.pathname === item.href ? 'page' : undefined}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </details>
+      <LangSwitch locale={locale} variant={variant} />
+    </div>
+  </div>
+
+  <style>
+    .header-menu > summary::-webkit-details-marker { display: none; }
+    .header-menu[open] .header-menu__chev { transform: rotate(180deg); }
+  </style>
+
+  <script>
+    document.addEventListener('click', (e) => {
+      document.querySelectorAll<HTMLDetailsElement>('details.header-menu[open]').forEach((d) => {
+        if (!d.contains(e.target as Node)) d.open = false;
+      });
+    });
+
+    // Hover-to-open on devices with a real pointer (desktop). Touch devices keep click behavior.
+    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (canHover) {
+      document.querySelectorAll<HTMLDetailsElement>('details.header-menu').forEach((d) => {
+        let closeTimer: number | undefined;
+        d.addEventListener('mouseenter', () => {
+          if (closeTimer) window.clearTimeout(closeTimer);
+          d.open = true;
+        });
+        d.addEventListener('mouseleave', () => {
+          closeTimer = window.setTimeout(() => { d.open = false; }, 120);
+        });
+      });
+    }
+  </script>
+</header>

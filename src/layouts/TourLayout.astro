@@ -1,0 +1,145 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from './BaseLayout.astro';
+import GradeTag from '../components/GradeTag.astro';
+import TopoDivider from '../components/TopoDivider.astro';
+import { localizePath, t, type Locale } from '../i18n';
+import { breadcrumbJsonLd, touristTripJsonLd } from '../lib/jsonld';
+import type { CollectionEntry } from 'astro:content';
+import { entrySlug, tourSiblingLocales } from '../lib/content';
+
+interface Props {
+  tour: CollectionEntry<'tours'>;
+  locale: Locale;
+}
+const { tour, locale } = Astro.props;
+const data = tour.data;
+const slug = entrySlug(tour);
+const availableLocales = await tourSiblingLocales(slug);
+
+const site = Astro.site!;
+const pageUrl = new URL(Astro.url.pathname, site).toString();
+
+const heroSrc = typeof data.heroImage === 'string' ? data.heroImage : data.heroImage.src;
+const heroAbsolute = new URL(heroSrc, site).toString();
+
+const jsonLd = [
+  touristTripJsonLd({
+    siteUrl: site.toString(),
+    pageUrl,
+    name: data.title,
+    description: data.summary,
+    image: heroAbsolute,
+    location: data.location,
+    durationDays: data.durationDays,
+    priceCNY: data.priceCNY,
+    locale,
+  }),
+  breadcrumbJsonLd([
+    { name: t(locale, 'nav.home'), url: new URL(localizePath(locale, '/'), site).toString() },
+    { name: t(locale, 'nav.tours'), url: new URL(localizePath(locale, '/tours'), site).toString() },
+    { name: data.title, url: pageUrl },
+  ]),
+];
+
+const metaRows: { label: string; value: string }[] = [
+  { label: t(locale, 'tours.meta.location'), value: data.location },
+  {
+    label: t(locale, 'tours.meta.type'),
+    value: t(locale, `tours.type.${data.climbingType}` as const),
+  },
+  { label: t(locale, 'tours.meta.difficulty'), value: data.difficulty },
+  {
+    label: t(locale, 'tours.meta.duration'),
+    value: `${data.durationDays} ${t(locale, 'tours.duration.days')}`,
+  },
+  { label: t(locale, 'tours.meta.season'), value: data.season },
+];
+if (data.priceCNY !== undefined) {
+  metaRows.push({
+    label: t(locale, 'tours.meta.price'),
+    value: `¥${data.priceCNY.toLocaleString(locale === 'zh' ? 'zh-CN' : 'en-US')}`,
+  });
+}
+---
+
+<BaseLayout
+  title={`${data.title} · ${t(locale, 'site.name')}`}
+  description={data.summary}
+  locale={locale}
+  image={heroSrc}
+  jsonLd={jsonLd}
+  type="article"
+  publishedTime={data.publishDate}
+  modifiedTime={data.updatedDate}
+  availableLocales={availableLocales}
+>
+  <article class="pb-24">
+    <header class="mx-auto max-w-5xl px-6 pt-16 pb-10">
+      <div class="flex items-center gap-4">
+        <p class="mono-eyebrow mono-eyebrow--flare">{t(locale, 'tours.eyebrow')}</p>
+        <span aria-hidden="true" class="h-px flex-1 bg-[color:var(--color-line)]"></span>
+        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[color:var(--color-slate-2)]">
+          {data.location}
+        </p>
+      </div>
+      <h1 class="mt-6 text-5xl leading-[1.02] md:text-7xl">
+        {data.title}
+      </h1>
+      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-[color:var(--color-slate)]">
+        {data.summary}
+      </p>
+      <div class="mt-8">
+        <GradeTag
+          locale={locale}
+          style={data.climbingType}
+          grade={data.difficulty}
+          duration={data.durationDays}
+        />
+      </div>
+    </header>
+
+    <div class="mx-auto max-w-6xl px-6">
+      <div class="overflow-hidden border border-[color:var(--color-ink)] bg-[color:var(--color-stone)]">
+        <Image
+          src={data.heroImage}
+          alt={data.title}
+          widths={[600, 1000, 1600, 2000]}
+          sizes="(min-width: 1280px) 1200px, 100vw"
+          class="h-auto w-full object-cover"
+        />
+      </div>
+    </div>
+
+    <div class="mx-auto max-w-5xl px-6">
+      <dl class="mt-10 grid grid-cols-1 gap-x-8 gap-y-0 border-y border-[color:var(--color-ink)] sm:grid-cols-2">
+        {
+          metaRows.map((row, i) => (
+            <div
+              class:list={[
+                'grid grid-cols-[130px_1fr] items-baseline gap-4 py-4',
+                i > 0 && 'border-t border-[color:var(--color-line-soft)]',
+                i === 1 && 'sm:border-t-0',
+              ]}
+            >
+              <dt class="font-mono text-[11px] uppercase tracking-[0.22em] text-[color:var(--color-slate-2)]">
+                {row.label}
+              </dt>
+              <dd class="font-display text-lg text-[color:var(--color-ink)]">
+                {row.value}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+
+    <TopoDivider />
+
+    <div class="mx-auto max-w-2xl px-6">
+      <div class="prose-guidebook">
+        <slot />
+      </div>
+    </div>
+  </article>
+</BaseLayout>

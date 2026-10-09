@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-label="Fuxianhu multi-pitch placeholder">
+  <defs>
+    <linearGradient id="skyF" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#eef3f5"/>
+      <stop offset="1" stop-color="#9fb7c7"/>
+    </linearGradient>
+    <linearGradient id="lakeF" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3d6f88"/>
+      <stop offset="1" stop-color="#1f3d50"/>
+    </linearGradient>
+    <linearGradient id="cliffF" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7a7064"/>
+      <stop offset="1" stop-color="#2e2a24"/>
+    </linearGradient>
+    <radialGradient id="caveF" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#0b0906"/>
+      <stop offset="1" stop-color="#2e2a24"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#skyF)"/>
+  <polygon points="0,900 0,420 220,340 420,460 640,320 860,440 1080,320 1200,420 1200,900" fill="url(#cliffF)"/>
+  <ellipse cx="820" cy="520" rx="140" ry="80" fill="url(#caveF)"/>
+  <rect x="0" y="640" width="1200" height="260" fill="url(#lakeF)"/>
+  <path d="M0,660 Q300,640 600,660 T1200,660" stroke="#f4ead9" stroke-opacity="0.25" fill="none" stroke-width="2"/>
+  <text x="60" y="860" font-family="Georgia, serif" font-size="40" fill="#f4ead9">Fuxianhu · 抚仙湖</text>
+</svg>

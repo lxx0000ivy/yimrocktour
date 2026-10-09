@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-label="Spring Liming trip report placeholder">
+  <defs>
+    <linearGradient id="dawn" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fbf7f2"/>
+      <stop offset="1" stop-color="#d4b177"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#dawn)"/>
+  <circle cx="240" cy="240" r="80" fill="#f4ead9"/>
+  <polygon points="0,900 240,540 420,700 640,480 840,660 1040,520 1200,700 1200,900" fill="#b8874a"/>
+  <polygon points="0,900 180,720 380,820 580,700 780,820 980,720 1200,820 1200,900" fill="#6f4519"/>
+  <text x="60" y="850" font-family="Georgia, serif" font-size="38" fill="#f4ead9">Spring 2026 · 春季黎明</text>
+</svg>

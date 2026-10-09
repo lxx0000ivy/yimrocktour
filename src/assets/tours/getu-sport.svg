@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-label="Getu sport climbing placeholder">
+  <defs>
+    <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f4ead9"/>
+      <stop offset="1" stop-color="#d4b177"/>
+    </linearGradient>
+    <radialGradient id="cave" cx="0.5" cy="0.55" r="0.6">
+      <stop offset="0" stop-color="#1e1206"/>
+      <stop offset="1" stop-color="#543311"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#skyG)"/>
+  <path d="M0,900 L0,300 Q300,120 600,180 Q900,240 1200,120 L1200,900 Z" fill="#8c5a26"/>
+  <ellipse cx="600" cy="620" rx="420" ry="240" fill="url(#cave)"/>
+  <path d="M180,900 Q400,720 620,900 Z" fill="#38220b" opacity="0.8"/>
+  <path d="M700,900 Q900,760 1120,900 Z" fill="#38220b" opacity="0.8"/>
+  <text x="60" y="850" font-family="Georgia, serif" font-size="42" fill="#f4ead9">Getu · 格凸河</text>
+</svg>

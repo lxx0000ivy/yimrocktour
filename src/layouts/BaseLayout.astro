@@ -1,0 +1,100 @@
+---
+import SEO from '../components/SEO.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { localeHtmlLang, localizePath, t, type Locale } from '../i18n';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  locale: Locale;
+  image?: string;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  publishedTime?: Date;
+  modifiedTime?: Date;
+  type?: 'website' | 'article';
+  headerVariant?: 'ink' | 'stone';
+  availableLocales?: Locale[];
+  feedAlternates?: { type: string; href: string; title?: string }[];
+}
+
+const {
+  title,
+  description,
+  locale,
+  image,
+  jsonLd,
+  publishedTime,
+  modifiedTime,
+  type,
+  headerVariant = 'stone',
+  availableLocales,
+  feedAlternates,
+} = Astro.props;
+
+// Always advertise the current locale's RSS feed from <head>. Callers can
+// pass extra alternates (e.g. a tour-specific feed) via feedAlternates.
+const rssPath = localizePath(locale, '/rss.xml');
+const builtinFeed = {
+  type: 'application/rss+xml',
+  href: rssPath,
+  title: `${t(locale, 'site.name')} RSS`,
+};
+const feeds = feedAlternates ? [builtinFeed, ...feedAlternates] : [builtinFeed];
+---
+
+<!doctype html>
+<html lang={localeHtmlLang(locale)}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+    <SEO
+      title={title}
+      description={description}
+      locale={locale}
+      image={image}
+      jsonLd={jsonLd}
+      publishedTime={publishedTime}
+      modifiedTime={modifiedTime}
+      type={type}
+      availableLocales={availableLocales}
+      feedAlternates={feeds}
+    />
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <Header locale={locale} variant={headerVariant} />
+    <main class="flex-1"><slot /></main>
+    <Footer locale={locale} />
+
+    <script>
+      // Scroll-reveal: any element with `.reveal` toggles `.is-in` on entry.
+      // Runs only when the user hasn't asked for reduced motion.
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!prefersReduced && 'IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-in');
+                io.unobserve(entry.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.12 }
+        );
+        document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+      } else {
+        document.querySelectorAll('.reveal').forEach((el) => el.classList.add('is-in'));
+      }
+    </script>
+  </body>
+</html>

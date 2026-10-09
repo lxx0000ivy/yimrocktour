@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TourCard from '../TourCard.astro';
+import { getToursByLocale, entrySlug } from '../../lib/content';
+import { t, type Locale } from '../../i18n';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const tours = await getToursByLocale(locale);
+---
+
+<BaseLayout
+  title={`${t(locale, 'tours.title')} · ${t(locale, 'site.name')}`}
+  description={t(locale, 'tours.subtitle')}
+  locale={locale}
+>
+  <section class="mx-auto max-w-6xl px-6 pt-20 pb-12">
+    <p class="mono-eyebrow">{t(locale, 'tours.eyebrow')}</p>
+    <div class="mt-4 flex flex-col gap-6 border-b border-[color:var(--color-ink)] pb-8 md:flex-row md:items-end md:justify-between">
+      <h1 class="text-5xl leading-[1.02] md:text-7xl">{t(locale, 'tours.title')}</h1>
+      <p class="max-w-md text-base leading-relaxed text-[color:var(--color-slate)]">
+        {t(locale, 'tours.subtitle')}
+      </p>
+    </div>
+    <div class="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      {tours.map((tour, i) => <TourCard tour={tour} locale={locale} slug={entrySlug(tour)} index={i} />)}
+    </div>
+  </section>
+</BaseLayout>

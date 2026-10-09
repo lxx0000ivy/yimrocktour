@@ -1,0 +1,51 @@
+---
+/**
+ * A "field-notes" widget that reads like a snapshot from the crag.
+ * Purely decorative content — it exists to make the hero feel lived-in,
+ * not fake data pretending to be live telemetry.
+ */
+interface Props {
+  locale: 'zh' | 'en';
+}
+const { locale } = Astro.props;
+
+const rows =
+  locale === 'zh'
+    ? [
+        { k: '当前岩场', v: '黎明 · 千龟壁' },
+        { k: '风向 / 温度', v: 'NE 4m·s⁻¹ / 14℃' },
+        { k: '本周焦点', v: '3P 5.10c · Slow Dance' },
+      ]
+    : [
+        { k: 'Crag', v: 'Liming · Thousand Turtle Wall' },
+        { k: 'Wind / Temp', v: 'NE 4 m/s · 14°C' },
+        { k: 'This week', v: '3P 5.10c · Slow Dance' },
+      ];
+
+const heading = locale === 'zh' ? '现场笔记' : 'Field Notes';
+const stamp = locale === 'zh' ? '2026 · 春 · 记录 #037' : 'entry no. 037 · spring \'26';
+---
+
+<aside
+  class="w-full max-w-sm border border-[color:var(--color-line)] bg-[color:var(--color-chalk)] p-5 shadow-[8px_8px_0_0_var(--color-ink)] rotate-[-0.6deg]"
+  aria-label={heading}
+>
+  <header class="flex items-baseline justify-between border-b border-dashed border-[color:var(--color-line)] pb-2">
+    <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-[color:var(--color-ink)]">
+      {heading}
+    </span>
+    <span class="font-mono text-[10px] text-[color:var(--color-slate-2)]">{stamp}</span>
+  </header>
+  <dl class="mt-3 space-y-2 font-mono text-[12px]">
+    {
+      rows.map((row) => (
+        <div class="grid grid-cols-[auto_1fr] items-baseline gap-3">
+          <dt class="text-[color:var(--color-slate-2)] uppercase tracking-[0.12em] text-[10px] whitespace-nowrap">
+            {row.k}
+          </dt>
+          <dd class="text-[color:var(--color-ink)]">{row.v}</dd>
+        </div>
+      ))
+    }
+  </dl>
+</aside>

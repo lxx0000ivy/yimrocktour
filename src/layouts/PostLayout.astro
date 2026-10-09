@@ -1,0 +1,115 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from './BaseLayout.astro';
+import TopoDivider from '../components/TopoDivider.astro';
+import { localizePath, t, type Locale } from '../i18n';
+import { blogPostingJsonLd, breadcrumbJsonLd } from '../lib/jsonld';
+import type { CollectionEntry } from 'astro:content';
+import { entrySlug, postSiblingLocales } from '../lib/content';
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+  locale: Locale;
+}
+const { post, locale } = Astro.props;
+const data = post.data;
+const slug = entrySlug(post);
+const availableLocales = await postSiblingLocales(slug);
+
+const site = Astro.site!;
+const pageUrl = new URL(Astro.url.pathname, site).toString();
+const heroSrc = data.heroImage
+  ? typeof data.heroImage === 'string'
+    ? data.heroImage
+    : data.heroImage.src
+  : undefined;
+const heroAbsolute = heroSrc ? new URL(heroSrc, site).toString() : undefined;
+
+const jsonLd = [
+  blogPostingJsonLd({
+    siteUrl: site.toString(),
+    pageUrl,
+    title: data.title,
+    description: data.summary,
+    image: heroAbsolute,
+    publishDate: data.publishDate,
+    updatedDate: data.updatedDate,
+    author: data.author,
+  }),
+  breadcrumbJsonLd([
+    { name: t(locale, 'nav.home'), url: new URL(localizePath(locale, '/'), site).toString() },
+    { name: t(locale, 'nav.blog'), url: new URL(localizePath(locale, '/blog'), site).toString() },
+    { name: data.title, url: pageUrl },
+  ]),
+];
+
+const dateStr = data.publishDate.toLocaleDateString(locale === 'zh' ? 'zh-CN' : 'en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout
+  title={`${data.title} · ${t(locale, 'site.name')}`}
+  description={data.summary}
+  locale={locale}
+  image={heroSrc}
+  jsonLd={jsonLd}
+  type="article"
+  publishedTime={data.publishDate}
+  modifiedTime={data.updatedDate}
+  availableLocales={availableLocales}
+>
+  <article class="pb-24">
+    <header class="mx-auto max-w-3xl px-6 pt-16 pb-10">
+      <div class="flex items-center gap-4">
+        <p class="mono-eyebrow mono-eyebrow--flare">{t(locale, 'blog.eyebrow')}</p>
+        <span aria-hidden="true" class="h-px flex-1 bg-[color:var(--color-line)]"></span>
+        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-[color:var(--color-slate-2)]">
+          {dateStr}{data.author && <span> · {data.author}</span>}
+        </p>
+      </div>
+      <h1 class="mt-6 text-4xl leading-[1.05] md:text-6xl">
+        {data.title}
+      </h1>
+      <p class="mt-6 text-lg leading-relaxed text-[color:var(--color-slate)]">
+        {data.summary}
+      </p>
+    </header>
+
+    {
+      data.heroImage && (
+        <div class="mx-auto max-w-5xl px-6">
+          <div class="overflow-hidden border border-[color:var(--color-ink)] bg-[color:var(--color-stone)]">
+            <Image
+              src={data.heroImage}
+              alt={data.title}
+              widths={[600, 1000, 1600]}
+              sizes="(min-width: 1024px) 1000px, 100vw"
+              class="h-auto w-full object-cover"
+            />
+          </div>
+        </div>
+      )
+    }
+
+    <TopoDivider />
+
+    <div class="mx-auto max-w-2xl px-6">
+      <div class="prose-guidebook">
+        <slot />
+      </div>
+
+      {data.tags && data.tags.length > 0 && (
+        <div class="mt-16 flex flex-wrap gap-2 border-t border-[color:var(--color-line)] pt-6">
+          {data.tags.map((tag) => (
+            <span class="border border-[color:var(--color-line)] px-2 py-1 font-mono text-[10px] uppercase tracking-[0.2em] text-[color:var(--color-slate-2)]">
+              #{tag}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  </article>
+</BaseLayout>

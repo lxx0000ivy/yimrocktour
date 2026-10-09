@@ -1,0 +1,20 @@
+---
+import { render } from 'astro:content';
+import TourLayout from '../../layouts/TourLayout.astro';
+import { getToursByLocale, entrySlug } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const tours = await getToursByLocale('zh');
+  return tours.map((tour) => ({
+    params: { slug: entrySlug(tour) },
+    props: { tour },
+  }));
+}
+
+const { tour } = Astro.props;
+const { Content } = await render(tour);
+---
+
+<TourLayout tour={tour} locale="zh">
+  <Content />
+</TourLayout>

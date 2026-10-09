@@ -1,0 +1,284 @@
+@import 'tailwindcss';
+
+/* --------------------------------------------------------------------------
+ * Chalk & Slate — a design language borrowed from climbing guidebooks.
+ * Cold stone palette + a single spray-paint accent + monospace metadata.
+ * -------------------------------------------------------------------------- */
+@theme {
+  --font-display:
+    'Fraunces', 'Noto Serif SC', 'Songti SC', 'STSong', Georgia, serif;
+  --font-sans:
+    'Inter', 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans GB', system-ui, sans-serif;
+  --font-mono:
+    'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  /* Core palette */
+  --color-ink: #0B0E10;
+  --color-slate: #242A2E;
+  --color-slate-2: #363E43;
+  --color-stone: #EAE7DF;
+  --color-chalk: #F3F0E7;
+  --color-line: #C7C3B5;
+  --color-line-soft: #DBD6C7;
+  --color-moss: #4A5240;
+  --color-flare: #EE4A22;   /* spray-paint route marker */
+  --color-flare-soft: #F7B8A3;
+
+  /* Style-of-climbing color codes for GradeTag */
+  --color-style-trad: #E07A1F;
+  --color-style-sport: #4A5240;
+  --color-style-boulder: #6A7681;
+  --color-style-mixed: #B08A3E;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    font-family: var(--font-sans);
+    color: var(--color-slate);
+    background: var(--color-stone);
+    font-feature-settings: 'ss01', 'cv11';
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    color: var(--color-ink);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+  /* Fraunces variable axes tuned for a slight hand-inscribed warmth */
+  h1, h2 {
+    font-variation-settings: 'opsz' 144, 'SOFT' 40, 'WONK' 0;
+  }
+  h1 em, h2 em {
+    /* the "wonky" accent — used on one or two words per hero */
+    font-style: italic;
+    font-variation-settings: 'opsz' 144, 'SOFT' 100, 'WONK' 1;
+    color: var(--color-flare);
+    font-weight: 500;
+  }
+  a { color: inherit; }
+  ::selection {
+    background: var(--color-flare);
+    color: var(--color-chalk);
+  }
+}
+
+/* --------------------------------------------------------------------------
+ * Utilities used across the site — kept small and specific.
+ * -------------------------------------------------------------------------- */
+
+.mono-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-slate-2);
+}
+
+.mono-eyebrow--flare { color: var(--color-flare); }
+.mono-eyebrow--chalk { color: var(--color-line); }
+
+.rule-hair {
+  border: 0;
+  border-top: 1px solid var(--color-line);
+}
+
+/* Topo-line divider: three offset dashed lines mimicking a route map. */
+.topo-divider {
+  position: relative;
+  height: 44px;
+  overflow: hidden;
+}
+.topo-divider::before,
+.topo-divider::after,
+.topo-divider > span {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed var(--color-line);
+}
+.topo-divider::before { top: 8px; opacity: 0.7; }
+.topo-divider > span  { top: 22px; opacity: 0.5; }
+.topo-divider::after  { top: 36px; opacity: 0.35; border-top-style: dotted; }
+
+.topo-divider--dark::before,
+.topo-divider--dark > span,
+.topo-divider--dark::after {
+  border-top-color: var(--color-slate-2);
+}
+
+/* Chalky paper card */
+.paper {
+  background: var(--color-chalk);
+  border: 1px solid var(--color-line);
+  border-radius: 2px;
+}
+
+/* Long-form article prose used by TourLayout + PostLayout. */
+.prose-guidebook :where(h2, h3, h4) {
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--color-ink);
+}
+.prose-guidebook h2 { font-size: 1.875rem; line-height: 1.15; }
+.prose-guidebook h3 { font-size: 1.25rem; letter-spacing: -0.01em; }
+.prose-guidebook :where(h1, h2, h3, h4) em {
+  font-style: italic;
+  font-variation-settings: 'opsz' 144, 'SOFT' 100, 'WONK' 1;
+  color: var(--color-flare);
+}
+.prose-guidebook p { line-height: 1.75; color: var(--color-slate); margin: 1em 0; }
+.prose-guidebook a { color: var(--color-flare); text-decoration: none; }
+.prose-guidebook a:hover { text-decoration: underline; }
+.prose-guidebook strong { color: var(--color-ink); }
+.prose-guidebook blockquote {
+  border-left: 2px solid var(--color-flare);
+  padding-left: 1.5rem;
+  font-style: italic;
+  color: var(--color-slate);
+  margin: 1.5rem 0;
+}
+.prose-guidebook hr { border: 0; border-top: 1px solid var(--color-line); margin: 2rem 0; }
+.prose-guidebook code {
+  color: var(--color-ink);
+  background: var(--color-chalk);
+  padding: 0.1em 0.35em;
+  border-radius: 0;
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+.prose-guidebook ul, .prose-guidebook ol { margin: 1em 0; padding-left: 1.5rem; }
+.prose-guidebook li { margin: 0.35em 0; line-height: 1.7; color: var(--color-slate); }
+
+/* A "spray-paint marker" underline, used sparingly */
+.spray-mark {
+  background-image: linear-gradient(180deg, transparent 62%, var(--color-flare-soft) 62%, var(--color-flare-soft) 92%, transparent 92%);
+  padding-inline: 0.05em;
+}
+
+/* Fine paper grain overlay applied only in hero — pure CSS, no images. */
+.grain {
+  position: relative;
+  isolation: isolate;
+}
+.grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.06;
+  mix-blend-mode: overlay;
+  background-image:
+    radial-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),
+    radial-gradient(rgba(0,0,0,0.5) 1px, transparent 1px);
+  background-size: 3px 3px, 5px 5px;
+  background-position: 0 0, 1px 2px;
+}
+.grain > * { position: relative; z-index: 1; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .fade-in-up {
+    animation: fade-in-up 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  .fade-in-up-2 { animation-delay: 90ms; }
+  .fade-in-up-3 { animation-delay: 180ms; }
+  .fade-in-up-4 { animation-delay: 320ms; }
+  @keyframes fade-in-up {
+    from { opacity: 0; transform: translate3d(0, 12px, 0); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* Hero routes draw themselves in like a topo being sketched. */
+  @keyframes route-draw {
+    to { stroke-dashoffset: 0; }
+  }
+  .hero-route {
+    stroke-dashoffset: 1400;
+    animation: route-draw 2.6s cubic-bezier(0.5, 0.05, 0.35, 1) 250ms both;
+  }
+  .hero-route--alt {
+    animation-duration: 3.4s;
+    animation-delay: 500ms;
+  }
+
+  /* Belay anchors softly pulse. Uses transform-box so it scales around center. */
+  @keyframes belay-pulse {
+    0%,100% { transform: scale(1); opacity: 1; }
+    50%     { transform: scale(1.6); opacity: 0.35; }
+  }
+  .belay-pulse {
+    transform-origin: center;
+    transform-box: fill-box;
+    animation: belay-pulse 2.6s ease-in-out infinite;
+  }
+  .belay-pulse--slow { animation-duration: 3.8s; animation-delay: 900ms; }
+  .belay-pulse--offset { animation-delay: 1.6s; }
+
+  /* CragStatus card breathes with a shallow sway. */
+  @keyframes crag-sway {
+    0%,100% { transform: rotate(-0.6deg) translateY(0); }
+    50%     { transform: rotate(-1.1deg) translateY(-2px); }
+  }
+  .crag-sway { animation: crag-sway 8s ease-in-out infinite; }
+
+  /* True marquee for the hero ticker. */
+  @keyframes ticker-slide {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(-50%, 0, 0); }
+  }
+  .marquee { overflow: hidden; }
+  .marquee-track {
+    display: inline-flex;
+    width: max-content;
+    animation: ticker-slide 42s linear infinite;
+    will-change: transform;
+  }
+  .marquee:hover .marquee-track { animation-play-state: paused; }
+
+  /* Scroll reveal — used by TopoDivider and section eyebrows. */
+  .reveal {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+    transition:
+      opacity 900ms cubic-bezier(0.2, 0.7, 0.2, 1),
+      transform 900ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .reveal.is-in { opacity: 1; transform: none; }
+
+  /* TopoDivider hairlines wipe in from the left, staggered by depth. */
+  .topo-divider.reveal::before,
+  .topo-divider.reveal > span,
+  .topo-divider.reveal::after {
+    transform-origin: left center;
+    transform: scaleX(0);
+    transition: transform 900ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .topo-divider.reveal.is-in::before { transform: scaleX(1); }
+  .topo-divider.reveal.is-in > span  { transform: scaleX(1); transition-delay: 160ms; }
+  .topo-divider.reveal.is-in::after  { transform: scaleX(1); transition-delay: 320ms; }
+
+  /* Underline that draws in on hover — used on nav + read-more links. */
+  .draw-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0 1px;
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    transition: background-size 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .draw-underline:hover { background-size: 100% 1px; }
+}
+
+/* Respect reduced motion: kill decorative loops and slide effects. */
+@media (prefers-reduced-motion: reduce) {
+  .hero-route,
+  .belay-pulse,
+  .crag-sway,
+  .marquee-track { animation: none !important; }
+  .reveal { opacity: 1; transform: none; }
+}

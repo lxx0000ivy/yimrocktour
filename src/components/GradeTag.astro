@@ -1,0 +1,40 @@
+---
+import { t, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+  style: 'trad' | 'sport' | 'boulder' | 'mixed';
+  grade: string;             // e.g. "5.9 – 5.11"
+  duration: number;          // days
+  compact?: boolean;
+}
+const { locale, style, grade, duration, compact = false } = Astro.props;
+
+const styleColorVar = `var(--color-style-${style})`;
+const styleLabel = t(locale, `tours.type.${style}` as const);
+const daysCompact = locale === 'zh' ? '天' : 'd';
+const daysAria = t(locale, 'tours.duration.days');
+---
+
+<div
+  class:list={[
+    'inline-flex items-stretch overflow-hidden font-mono text-[11px] leading-none',
+    'border border-[color:var(--color-ink)] bg-[color:var(--color-chalk)]',
+    compact ? 'gap-0' : 'gap-0',
+  ]}
+  role="group"
+  aria-label={`${styleLabel} · ${grade} · ${duration} ${daysAria}`}
+>
+  <span
+    aria-hidden="true"
+    class="w-[6px] shrink-0"
+    style={`background:${styleColorVar}`}
+  ></span>
+  <span class="flex items-center gap-2 px-2 py-1.5 uppercase tracking-[0.14em] text-[color:var(--color-ink)]">
+    <span>{styleLabel}</span>
+    <span class="text-[color:var(--color-line)]">/</span>
+    <span>{grade}</span>
+    <span class="text-[color:var(--color-line)]">/</span>
+    <span>{duration}{daysCompact}</span>
+  </span>
+</div>

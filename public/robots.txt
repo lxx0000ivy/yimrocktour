@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://yimrocktour.pages.dev/sitemap-index.xml
+
+# Feeds
+# https://yimrocktour.pages.dev/rss.xml
+# https://yimrocktour.pages.dev/en/rss.xml

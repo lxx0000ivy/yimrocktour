@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="Hero backdrop placeholder">
+  <defs>
+    <linearGradient id="heroSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1a1510"/>
+      <stop offset="0.55" stop-color="#2b1e12"/>
+      <stop offset="1" stop-color="#120b06"/>
+    </linearGradient>
+    <linearGradient id="heroFar" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5e4322"/>
+      <stop offset="1" stop-color="#2a1c0d"/>
+    </linearGradient>
+    <linearGradient id="heroMid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8c5a26"/>
+      <stop offset="1" stop-color="#3a230d"/>
+    </linearGradient>
+    <linearGradient id="heroNear" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4a2d0f"/>
+      <stop offset="1" stop-color="#120b06"/>
+    </linearGradient>
+    <radialGradient id="heroSun" cx="0.78" cy="0.22" r="0.18">
+      <stop offset="0" stop-color="#f4ead9" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#f4ead9" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#heroSky)"/>
+  <circle cx="1248" cy="198" r="200" fill="url(#heroSun)"/>
+  <polygon points="0,900 0,560 180,440 360,500 540,380 720,480 900,360 1080,460 1260,340 1440,460 1600,400 1600,900" fill="url(#heroFar)" opacity="0.85"/>
+  <polygon points="0,900 0,660 200,560 420,620 620,520 820,600 1020,500 1240,580 1440,500 1600,560 1600,900" fill="url(#heroMid)" opacity="0.9"/>
+  <polygon points="0,900 0,760 220,700 440,760 660,680 880,740 1100,660 1320,720 1540,660 1600,700 1600,900" fill="url(#heroNear)"/>
+</svg>

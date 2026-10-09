@@ -1,0 +1,16 @@
+---
+interface Props {
+  variant?: 'light' | 'dark';
+}
+const { variant = 'light' } = Astro.props;
+---
+
+<div
+  class:list={[
+    'topo-divider reveal mx-auto my-16 max-w-6xl px-6',
+    variant === 'dark' && 'topo-divider--dark',
+  ]}
+  aria-hidden="true"
+>
+  <span></span>
+</div>

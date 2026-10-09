@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-label="Kunming real rock placeholder">
+  <defs>
+    <linearGradient id="skyK" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f4ead9"/>
+      <stop offset="1" stop-color="#d9c48a"/>
+    </linearGradient>
+    <linearGradient id="rockK" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9c6a2f"/>
+      <stop offset="1" stop-color="#4a2d0f"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#skyK)"/>
+  <polygon points="0,900 180,420 300,560 480,260 620,460 820,180 1020,500 1200,320 1200,900" fill="url(#rockK)"/>
+  <polygon points="0,900 160,660 320,780 500,580 680,760 860,620 1060,780 1200,660 1200,900" fill="#38220b" opacity="0.72"/>
+  <circle cx="1000" cy="200" r="54" fill="#f4ead9" opacity="0.9"/>
+  <text x="60" y="850" font-family="Georgia, serif" font-size="40" fill="#f4ead9">Kunming · Fly Me To The Moon</text>
+</svg>

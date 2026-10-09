@@ -1,0 +1,57 @@
+---
+import { Image } from 'astro:assets';
+import { localizePath, type Locale } from '../i18n';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+  locale: Locale;
+  slug: string;
+  index?: number;
+}
+const { post, locale, slug, index } = Astro.props;
+const { title, summary, heroImage, publishDate, tags } = post.data;
+const href = localizePath(locale, `/blog/${slug}`);
+const dateStr = publishDate.toLocaleDateString(locale === 'zh' ? 'zh-CN' : 'en-US', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+});
+const entryNo = String((index ?? 0) + 37).padStart(3, '0');
+---
+
+<a
+  href={href}
+  class="group grid gap-6 border-b border-[color:var(--color-line)] py-8 md:grid-cols-[220px_1fr] md:gap-8"
+>
+  {
+    heroImage && (
+      <div class="aspect-[4/3] overflow-hidden bg-[color:var(--color-chalk)] md:aspect-[5/4]">
+        <Image
+          src={heroImage}
+          alt={title}
+          widths={[300, 600]}
+          sizes="(min-width: 768px) 220px, 100vw"
+          class="h-full w-full object-cover grayscale-[0.2] transition-all duration-700 group-hover:scale-[1.03] group-hover:grayscale-0"
+        />
+      </div>
+    )
+  }
+  <div class="flex flex-col gap-3">
+    <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1 font-mono text-[11px] uppercase tracking-[0.2em] text-[color:var(--color-slate-2)]">
+      <span class="text-[color:var(--color-flare)]">Entry {entryNo}</span>
+      <span aria-hidden="true">·</span>
+      <span>{dateStr}</span>
+      {tags && tags.length > 0 && (
+        <>
+          <span aria-hidden="true">·</span>
+          <span>{tags.join(' / ')}</span>
+        </>
+      )}
+    </div>
+    <h3 class="text-2xl leading-tight text-[color:var(--color-ink)] transition-colors group-hover:text-[color:var(--color-flare)] md:text-3xl">
+      {title}
+    </h3>
+    <p class="max-w-2xl text-sm leading-relaxed text-[color:var(--color-slate)]">{summary}</p>
+  </div>
+</a>

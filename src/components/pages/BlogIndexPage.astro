@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../PostCard.astro';
+import { getPostsByLocale, entrySlug } from '../../lib/content';
+import { t, type Locale } from '../../i18n';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const posts = await getPostsByLocale(locale);
+---
+
+<BaseLayout
+  title={`${t(locale, 'blog.title')} · ${t(locale, 'site.name')}`}
+  description={t(locale, 'blog.subtitle')}
+  locale={locale}
+>
+  <section class="mx-auto max-w-4xl px-6 pt-20 pb-12">
+    <p class="mono-eyebrow">{t(locale, 'blog.eyebrow')}</p>
+    <div class="mt-4 flex flex-col gap-6 border-b border-[color:var(--color-ink)] pb-8 md:flex-row md:items-end md:justify-between">
+      <h1 class="text-5xl leading-[1.02] md:text-7xl">{t(locale, 'blog.title')}</h1>
+      <p class="max-w-md text-base leading-relaxed text-[color:var(--color-slate)]">
+        {t(locale, 'blog.subtitle')}
+      </p>
+    </div>
+    <div>
+      {posts.map((post, i) => <PostCard post={post} locale={locale} slug={entrySlug(post)} index={i} />)}
+    </div>
+  </section>
+</BaseLayout>

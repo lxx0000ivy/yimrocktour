@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { t, type Locale } from '../../i18n';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+---
+
+<BaseLayout
+  title={`${t(locale, 'about.title')} · ${t(locale, 'site.name')}`}
+  description={t(locale, 'about.body')}
+  locale={locale}
+>
+  <section class="mx-auto max-w-3xl px-6 pt-20 pb-24">
+    <p class="mono-eyebrow">{t(locale, 'about.eyebrow')}</p>
+    <h1 class="mt-4 text-5xl leading-[1.05] md:text-7xl">{t(locale, 'about.title')}</h1>
+    <p class="mt-8 max-w-2xl text-lg leading-relaxed text-[color:var(--color-slate)]">
+      {t(locale, 'about.body')}
+    </p>
+  </section>
+</BaseLayout>

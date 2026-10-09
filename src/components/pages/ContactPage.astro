@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { t, type Locale } from '../../i18n';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+---
+
+<BaseLayout
+  title={`${t(locale, 'contact.title')} · ${t(locale, 'site.name')}`}
+  description={t(locale, 'contact.body')}
+  locale={locale}
+>
+  <section class="mx-auto max-w-2xl px-6 pt-20 pb-24">
+    <p class="mono-eyebrow">{t(locale, 'contact.eyebrow')}</p>
+    <h1 class="mt-4 text-5xl leading-[1.05] md:text-7xl">{t(locale, 'contact.title')}</h1>
+    <p class="mt-6 max-w-xl text-lg leading-relaxed text-[color:var(--color-slate)]">
+      {t(locale, 'contact.body')}
+    </p>
+
+    <dl class="mt-10 divide-y divide-[color:var(--color-line)] border-y border-[color:var(--color-ink)]">
+      <div class="grid grid-cols-[110px_1fr] items-baseline gap-4 py-4">
+        <dt class="font-mono text-[11px] uppercase tracking-[0.22em] text-[color:var(--color-slate-2)]">
+          {t(locale, 'contact.emailLabel')}
+        </dt>
+        <dd class="font-display text-xl">
+          <a class="hover:text-[color:var(--color-flare)]" href="mailto:hello@yimrocktour.com">
+            hello@yimrocktour.com
+          </a>
+        </dd>
+      </div>
+      <div class="grid grid-cols-[110px_1fr] items-baseline gap-4 py-4">
+        <dt class="font-mono text-[11px] uppercase tracking-[0.22em] text-[color:var(--color-slate-2)]">
+          {t(locale, 'contact.wechatLabel')}
+        </dt>
+        <dd class="font-display text-xl">yim-rocktour</dd>
+      </div>
+    </dl>
+  </section>
+</BaseLayout>

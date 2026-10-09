@@ -1,0 +1,124 @@
+---
+import { Image } from 'astro:assets';
+import CragStatus from './CragStatus.astro';
+import { t, type Locale } from '../i18n';
+import heroBg from '../assets/hero/hero-bg.svg';
+
+interface Props {
+  locale: Locale;
+  primaryCtaHref: string;
+  secondaryCtaHref?: string;
+  coursesCtaHref?: string;
+}
+const { locale, primaryCtaHref, secondaryCtaHref, coursesCtaHref } = Astro.props;
+
+const tickerItems = [
+  'Liming · 黎明',
+  'Getu · 格凸',
+  'Yangshuo · 阳朔',
+  { text: locale === 'zh' ? '双语向导' : 'Bilingual guides', accent: true },
+  'Oct — Apr',
+  'N 26°53′ · E 100°21′',
+  locale === 'zh' ? '现场记录 #037' : 'Field entry #037',
+];
+---
+
+<section
+  class="relative overflow-hidden bg-[color:var(--color-ink)] text-[color:var(--color-chalk)]"
+>
+  <Image
+    src={heroBg}
+    alt=""
+    aria-hidden="true"
+    widths={[800, 1200, 1600, 2000]}
+    sizes="100vw"
+    class="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-70"
+  />
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-0 bg-gradient-to-b from-[color:var(--color-ink)]/60 via-[color:var(--color-ink)]/40 to-[color:var(--color-ink)]/85"
+  ></div>
+
+  <div class="relative mx-auto grid max-w-6xl gap-10 px-6 pt-24 pb-24 md:grid-cols-[1.55fr_1fr] md:gap-10 md:pt-32 md:pb-28">
+    <div class="max-w-3xl">
+      <p class="mono-eyebrow mono-eyebrow--chalk fade-in-up">
+        {t(locale, 'home.hero.coords')}
+      </p>
+
+      <h1
+        class="fade-in-up fade-in-up-2 mt-8 text-[clamp(2.6rem,7vw,5.5rem)] leading-[0.98] tracking-[-0.02em] text-[color:var(--color-chalk)]"
+      >
+        {t(locale, 'home.hero.titleLead')}<span class="whitespace-nowrap"> </span><em class="spray-mark">{t(locale, 'home.hero.titleAccent')}</em><br class="hidden md:inline" />
+        <span class="text-[color:var(--color-stone)]">{t(locale, 'home.hero.titleTail')}</span>
+      </h1>
+
+      <p class="fade-in-up fade-in-up-3 mt-8 max-w-xl text-lg leading-relaxed text-[color:var(--color-line-soft)]">
+        {t(locale, 'home.hero.subtitle')}
+      </p>
+
+      <div class="fade-in-up fade-in-up-4 mt-10 flex flex-wrap items-center gap-4">
+        <a
+          href={primaryCtaHref}
+          class="group inline-flex items-center gap-3 bg-[color:var(--color-flare)] px-6 py-3 font-mono text-[11px] uppercase tracking-[0.22em] text-[color:var(--color-ink)] transition-transform hover:-translate-y-[1px] hover:shadow-[4px_4px_0_0_var(--color-chalk)]"
+        >
+          <span>{t(locale, 'home.hero.cta')}</span>
+          <span aria-hidden="true" class="transition-transform group-hover:translate-x-1">→</span>
+        </a>
+        {
+          coursesCtaHref && (
+            <a
+              href={coursesCtaHref}
+              class="group inline-flex items-center gap-3 border border-[color:var(--color-chalk)] px-6 py-3 font-mono text-[11px] uppercase tracking-[0.22em] text-[color:var(--color-chalk)] transition-colors hover:bg-[color:var(--color-chalk)] hover:text-[color:var(--color-ink)]"
+            >
+              <span>{t(locale, 'home.hero.ctaCourses')}</span>
+              <span aria-hidden="true" class="transition-transform group-hover:translate-x-1">→</span>
+            </a>
+          )
+        }
+        {
+          secondaryCtaHref && (
+            <a
+              href={secondaryCtaHref}
+              class="draw-underline inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] text-[color:var(--color-chalk)] hover:text-[color:var(--color-flare)]"
+            >
+              {t(locale, 'home.hero.ctaAlt')} ↓
+            </a>
+          )
+        }
+      </div>
+    </div>
+
+    <div class="fade-in-up fade-in-up-3 md:pt-16 md:justify-self-end">
+      <div class="crag-sway">
+        <CragStatus locale={locale} />
+      </div>
+    </div>
+  </div>
+
+  <!-- Marquee ticker: duplicated inline so a single translateX(-50%) loops seamlessly. -->
+  <div
+    class="marquee relative border-t border-[color:var(--color-slate-2)] bg-[color:var(--color-slate)] text-[color:var(--color-line)]"
+    aria-hidden="true"
+  >
+    <div class="marquee-track py-3 font-mono text-[11px] uppercase tracking-[0.24em]">
+      {
+        [0, 1].map(() => (
+          <span class="flex items-center gap-8 pr-8">
+            {tickerItems.map((item) => (
+              <>
+                {typeof item === 'string' ? (
+                  <span>{item}</span>
+                ) : (
+                  <span class:list={[item.accent && 'text-[color:var(--color-flare)]']}>
+                    {item.text}
+                  </span>
+                )}
+                <span class="text-[color:var(--color-slate-2)]">/</span>
+              </>
+            ))}
+          </span>
+        ))
+      }
+    </div>
+  </div>
+</section>
